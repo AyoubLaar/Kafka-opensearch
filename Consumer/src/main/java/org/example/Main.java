@@ -21,6 +21,7 @@ public class Main {
             ConsumerRecords<String,String> records = consumer.consume(5000);
             log.info("Processing {} records.",records.count());
             BulkRequest bulkRequest = new BulkRequest();
+            if(records.count() == 0)continue;
             for(ConsumerRecord<String,String> record : records) {
                 String jsonString = record.value();
                 JSONObject jsonObject = Mapper.mapStringToJSON(jsonString);
