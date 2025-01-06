@@ -26,6 +26,9 @@ public class Connection {
 
     private static final String username;
     private static final String password;
+    private static final String opensearchHost;
+    private static final String opensearchScheme;
+    private static final int opensearchPort;
 
     private RestHighLevelClient client;
 
@@ -37,17 +40,18 @@ public class Connection {
 
             username = (String)properties.get("opensearch.username");
             password = (String)properties.get("opensearch.password");
-
+            opensearchHost = (String)properties.get("opensearch.host");
+            opensearchPort = Integer.parseInt((String)properties.get("opensearch.port"));
+            opensearchScheme = (String)properties.get("opensearch.scheme");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public RestHighLevelClient connect(){
         //Create a client.
-        RestClientBuilder builder = RestClient.builder(new HttpHost("localhost", 9200, "http"));
+        RestClientBuilder builder = RestClient.builder(new HttpHost(opensearchHost, opensearchPort, opensearchScheme));
         RestHighLevelClient client = new RestHighLevelClient(builder);
         log.info("connected successfully to opensearch.");
         setClient(client);
